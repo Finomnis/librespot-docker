@@ -1,11 +1,4 @@
 
-curl https://sh.rustup.rs -sSf | sh -s -- -y
-export PATH="/root/.cargo/bin/:${PATH}"
-rustup target add aarch64-unknown-linux-gnu
-rustup target add arm-unknown-linux-gnueabi
-rustup target add arm-unknown-linux-gnueabihf
-#rustup target add mipsel-unknown-linux-gnu
-
 mkdir /.cargo && echo '[target.aarch64-unknown-linux-gnu]
 linker = "aarch64-linux-gnu-gcc"' > /.cargo/config && echo '[target.arm-unknown-linux-gnueabihf]
 linker = "arm-linux-gnueabihf-gcc"' >> /.cargo/config && echo '[target.arm-unknown-linux-gnueabi]
