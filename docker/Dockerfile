@@ -6,8 +6,13 @@ ARG DEBIAN_VERSION="stretch"
 #
 FROM debian:$DEBIAN_VERSION
 
+RUN dpkg --add-architecture arm64
+RUN dpkg --add-architecture armhf
+RUN dpkg --add-architecture armel
 RUN apt-get update
-RUN apt-get install -y git
+
+RUN apt-get install -y curl git build-essential crossbuild-essential-arm64 crossbuild-essential-armel crossbuild-essential-armhf pkg-config
+RUN apt-get install -y libasound2-dev libasound2-dev:arm64 libasound2-dev:armel libasound2-dev:armhf
 
 ARG LIBRESPOT_VERSION
 

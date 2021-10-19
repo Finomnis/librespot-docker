@@ -1,11 +1,3 @@
-dpkg --add-architecture arm64
-dpkg --add-architecture armhf
-dpkg --add-architecture armel
-#dpkg --add-architecture mipsel
-apt-get update
-
-apt-get install -y curl git build-essential crossbuild-essential-arm64 crossbuild-essential-armel crossbuild-essential-armhf pkg-config
-apt-get install -y libasound2-dev libasound2-dev:arm64 libasound2-dev:armel libasound2-dev:armhf
 
 curl https://sh.rustup.rs -sSf | sh -s -- -y
 export PATH="/root/.cargo/bin/:${PATH}"
