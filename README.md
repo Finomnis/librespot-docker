@@ -16,7 +16,7 @@ Detailed instructions on how to setup PulseAudio and Docker on a Raspberry Pi ca
 To run the librespot Docker image successfully, you have to mount in the PulseAudio device as `/run/user/1000/pulse` to the Docker container and publish the
 ports `5353/udp` and `5354/tcp`.
 
-This all can be achieved by the following docker-compose script:
+All of this can be achieved through the following docker-compose script:
 
 ```
 version: "2"
