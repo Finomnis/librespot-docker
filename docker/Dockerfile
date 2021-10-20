@@ -71,8 +71,8 @@ RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-featur
 FROM debian:$DEBIAN_VERSION
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
-  libpulse0 \
-  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    libpulse0 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set up the user
 RUN groupadd -g 1000 pi && useradd pi -s /bin/bash -m -u 1000 -g 1000
@@ -92,7 +92,7 @@ RUN librespot --version
 
 # Ports
 EXPOSE 5353/udp
-EXPOSE 5354/udp
+EXPOSE 5354/tcp
 
 # Execute start script at runtime
 COPY start.sh /start.sh
