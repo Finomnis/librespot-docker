@@ -33,7 +33,7 @@ services:
         - /run/user/1000/pulse:/run/user/1000/pulse
 ```
 
-If you are not user `1000` you might have to adjust first `1000` according to your user id.
+If you are not the user with id `1000`, you might have to adjust the first `1000` according to your user id.
 
 To add custom configuration for your librespot instance, here is a more complete script including environment variables:
 
