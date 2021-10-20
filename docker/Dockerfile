@@ -52,17 +52,17 @@ RUN mkdir -p \
 
 # Build librespot binaries
 RUN cargo build --release --no-default-features --features pulseaudio-backend \
-    cp $CARGO_TARGET_DIR/release/librespot /artifacts/linux/amd64/ \
-    rm -rf $CARGO_TARGET_DIR
+    && cp $CARGO_TARGET_DIR/release/librespot /artifacts/linux/amd64/ \
+    && rm -rf $CARGO_TARGET_DIR
 RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-features --features pulseaudio-backend \
-    cp $CARGO_TARGET_DIR/aarch64-unknown-linux-gnu/release/librespot /artifacts/linux/arm64/ \
-    rm -rf $CARGO_TARGET_DIR
+    && cp $CARGO_TARGET_DIR/aarch64-unknown-linux-gnu/release/librespot /artifacts/linux/arm64/ \
+    && rm -rf $CARGO_TARGET_DIR
 RUN cargo build --release --target arm-unknown-linux-gnueabihf --no-default-features --features pulseaudio-backend \
-    cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabihf/release/librespot /artifacts/linux/arm/v7/ \
-    rm -rf $CARGO_TARGET_DIR
+    && cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabihf/release/librespot /artifacts/linux/arm/v7/ \
+    && rm -rf $CARGO_TARGET_DIR
 RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features pulseaudio-backend \
-    cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabi/release/librespot /artifacts/linux/arm/v6/ \
-    rm -rf $CARGO_TARGET_DIR
+    && cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabi/release/librespot /artifacts/linux/arm/v6/ \
+    && rm -rf $CARGO_TARGET_DIR
 
 
 ###################################
