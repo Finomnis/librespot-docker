@@ -112,8 +112,8 @@ services:
 
 Explanation:
 
-- `image: "ghcr.io/finomnis/librespot-docker"`: This image gets built from this repository. It contains the librespot player.
-  This image is tagged manually to whenever there is a proper release. If you want to use the latest version, use `ghcr.io/finomnis/librespot-docker:main`.
+- `image: "ghcr.io/finomnis/librespot-docker"`: This image gets built from this repository and contains the librespot player.
+  The image is tagged manually to whenever there is a proper release. If you want to use the latest version, use `ghcr.io/finomnis/librespot-docker:main`.
 - `tty: true`: Runs librespot in a virtual TTY, enabling nice color log.
 - `5353:5353/udp` and `5354:5354/tcp`: Those are the ports required by librespot.
 - `/run/user/1000/pulse:/run/user/1000/pulse`: This volume mounts in the pulseaudio device, giving the container the capability to play audio.
