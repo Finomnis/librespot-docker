@@ -38,5 +38,4 @@ ARG LIBRESPOT_VERSION
 RUN git clone --branch v$LIBRESPOT_VERSION --depth 1 https://github.com/librespot-org/librespot.git /src
 WORKDIR /src
 
-COPY install.sh /opt/install.sh
-RUN /opt/install.sh
+RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-features --features alsa-backend
