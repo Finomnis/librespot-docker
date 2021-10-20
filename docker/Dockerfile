@@ -4,7 +4,7 @@ ARG DEBIAN_VERSION="11.1"
 ###################################
 # Build librespot
 #
-FROM debian:$DEBIAN_VERSION
+FROM --platform=$BUILDPLATFORM debian:$DEBIAN_VERSION as librespot-cross
 
 # Install target compilation targets
 RUN dpkg --add-architecture arm64
@@ -50,12 +50,48 @@ RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-featur
 RUN cargo build --release --target arm-unknown-linux-gnueabihf --no-default-features --features pulseaudio-backend
 RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features pulseaudio-backend
 
+# Create directories for artifacts
 RUN mkdir -p /artifacts/linux/amd64
 RUN mkdir -p /artifacts/linux/arm64
 RUN mkdir -p /artifacts/linux/arm/v7
 RUN mkdir -p /artifacts/linux/arm/v6
 
+# Store artifacts
 RUN cp $CARGO_TARGET_DIR/release/librespot /artifacts/linux/amd64/
 RUN cp $CARGO_TARGET_DIR/aarch64-unknown-linux-gnu/release/librespot /artifacts/linux/arm64/
 RUN cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabihf/release/librespot /artifacts/linux/arm/v7/
 RUN cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabi/release/librespot /artifacts/linux/arm/v6/
+
+
+###################################
+# Build final system
+#
+FROM debian:$DEBIAN_VERSION
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
+  libpulse0 \
+  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Set up the user
+RUN groupadd -g 1000 pi && useradd pi -s /bin/bash -m -u 1000 -g 1000
+
+# Pulse config
+COPY pulse-client.conf /etc/pulse/client.conf
+
+# Switch to user space
+USER pi
+
+# Install librespot
+ARG TARGETPLATFORM
+COPY --from=librespot-cross /artifacts/$TARGETPLATFORM/librespot /usr/local/bin/librespot
+
+# Sanity check if librespot is installed correctly
+RUN librespot --version
+
+# Ports
+EXPOSE 5353/udp
+EXPOSE 5354/udp
+
+# Execute start script at runtime
+COPY start.sh /start.sh
+ENTRYPOINT ["/start.sh"]
