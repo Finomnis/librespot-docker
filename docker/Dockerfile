@@ -45,7 +45,7 @@ RUN git clone --branch v$LIBRESPOT_VERSION --depth 1 https://github.com/librespo
 WORKDIR /src
 
 # Build librespot
-#RUN cargo build --release --no-default-features --features pulseaudio-backend
+RUN cargo build --release --no-default-features --features pulseaudio-backend
 RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-features --features pulseaudio-backend
 RUN cargo build --release --target arm-unknown-linux-gnueabihf --no-default-features --features pulseaudio-backend
-#RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features pulseaudio-backend
+RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features pulseaudio-backend
