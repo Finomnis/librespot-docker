@@ -1,6 +1,6 @@
 # librespot-docker
 
-A [librespot] docker container for your Raspberry Pi or PC.
+A [librespot] Docker container for your Raspberry Pi or PC.
 
 Convert your Raspberry Pi or PC to a [Spotify] streaming target!
 
@@ -13,7 +13,7 @@ Convert your Raspberry Pi or PC to a [Spotify] streaming target!
 Make sure you have a PulseAudio server installed and running. <br/>
 Detailed instructions on how to setup PulseAudio and Docker on a Raspberry Pi can be found [here](./RASPBERRY_PI_SETUP_GUIDE.md).
 
-To run the librespot docker image successfully, you have to mount in the PulseAudio device to `/run/user/1000/pulse` and publish the
+To run the librespot Docker image successfully, you have to mount in the PulseAudio device as `/run/user/1000/pulse` to the Docker container and publish the
 ports `5353/udp` and `5354/tcp`.
 
 This all can be achieved by the following docker-compose script:
