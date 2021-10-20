@@ -10,13 +10,12 @@ FROM --platform=$BUILDPLATFORM debian:$DEBIAN_VERSION as librespot-cross
 RUN dpkg --add-architecture arm64
 RUN dpkg --add-architecture armhf
 RUN dpkg --add-architecture armel
-RUN apt-get update
 
-# Add cross compilers
-RUN apt-get install -y curl git build-essential crossbuild-essential-arm64 crossbuild-essential-armel crossbuild-essential-armhf pkg-config
-
-# Add librespot dependencies
-RUN apt-get install -y libpulse-dev libpulse-dev:arm64 libpulse-dev:armel libpulse-dev:armhf
+# Add cross compilers and dependencies
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
+    curl git build-essential crossbuild-essential-arm64 crossbuild-essential-armel crossbuild-essential-armhf pkg-config \
+    libpulse-dev libpulse-dev:arm64 libpulse-dev:armel libpulse-dev:armhf \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install rust
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
