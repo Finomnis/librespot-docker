@@ -1,10 +1,4 @@
 
-mkdir /.cargo && echo '[target.aarch64-unknown-linux-gnu]
-linker = "aarch64-linux-gnu-gcc"' > /.cargo/config && echo '[target.arm-unknown-linux-gnueabihf]
-linker = "arm-linux-gnueabihf-gcc"' >> /.cargo/config && echo '[target.arm-unknown-linux-gnueabi]
-linker = "arm-linux-gnueabi-gcc"' >> /.cargo/config && echo '[target.mipsel-unknown-linux-gnu]
-linker = "mipsel-linux-gnu-gcc"' >> /.cargo/config
-
 mkdir /build && \
   mkdir /pi-tools && \
   curl -L https://github.com/raspberrypi/tools/archive/648a6eeb1e3c2b40af4eb34d88941ee0edeb3e9a.tar.gz | tar xz --strip-components 1 -C /pi-tools
