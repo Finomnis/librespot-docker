@@ -16,7 +16,7 @@ RUN apt-get update
 RUN apt-get install -y curl git build-essential crossbuild-essential-arm64 crossbuild-essential-armel crossbuild-essential-armhf pkg-config
 
 # Add librespot dependencies
-RUN apt-get install -y libasound2-dev libasound2-dev:arm64 libasound2-dev:armel libasound2-dev:armhf
+RUN apt-get install -y libpulse-dev libpulse-dev:arm64 libpulse-dev:armel libpulse-dev:armhf
 
 # Install rust
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
@@ -45,7 +45,7 @@ RUN git clone --branch v$LIBRESPOT_VERSION --depth 1 https://github.com/librespo
 WORKDIR /src
 
 # Build librespot
-#RUN cargo build --release --no-default-features --features alsa-backend
-RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-features --features alsa-backend
-RUN cargo build --release --target arm-unknown-linux-gnueabihf --no-default-features --features alsa-backend
-#RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features alsa-backend
+#RUN cargo build --release --no-default-features --features pulseaudio-backend
+RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-features --features pulseaudio-backend
+RUN cargo build --release --target arm-unknown-linux-gnueabihf --no-default-features --features pulseaudio-backend
+#RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features pulseaudio-backend
