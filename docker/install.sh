@@ -1,8 +1,4 @@
 
-mkdir /build && \
-  mkdir /pi-tools && \
-  curl -L https://github.com/raspberrypi/tools/archive/648a6eeb1e3c2b40af4eb34d88941ee0edeb3e9a.tar.gz | tar xz --strip-components 1 -C /pi-tools
-
 export CARGO_TARGET_DIR=/build
 export CARGO_HOME=/build/cache
 export PKG_CONFIG_ALLOW_CROSS=1
