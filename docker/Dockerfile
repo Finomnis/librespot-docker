@@ -10,13 +10,12 @@ FROM --platform=$BUILDPLATFORM debian:$DEBIAN_VERSION as librespot-cross
 RUN dpkg --add-architecture arm64
 RUN dpkg --add-architecture armhf
 RUN dpkg --add-architecture armel
-RUN apt-get update
 
-# Add cross compilers
-RUN apt-get install -y curl git build-essential crossbuild-essential-arm64 crossbuild-essential-armel crossbuild-essential-armhf pkg-config
-
-# Add librespot dependencies
-RUN apt-get install -y libpulse-dev libpulse-dev:arm64 libpulse-dev:armel libpulse-dev:armhf
+# Add cross compilers and dependencies
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
+    curl git build-essential crossbuild-essential-arm64 crossbuild-essential-armel crossbuild-essential-armhf pkg-config \
+    libpulse-dev libpulse-dev:arm64 libpulse-dev:armel libpulse-dev:armhf \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install rust
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
@@ -44,23 +43,26 @@ ARG LIBRESPOT_VERSION
 RUN git clone --branch v$LIBRESPOT_VERSION --depth 1 https://github.com/librespot-org/librespot.git /src
 WORKDIR /src
 
-# Build librespot
-RUN cargo build --release --no-default-features --features pulseaudio-backend
-RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-features --features pulseaudio-backend
-RUN cargo build --release --target arm-unknown-linux-gnueabihf --no-default-features --features pulseaudio-backend
-RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features pulseaudio-backend
-
 # Create directories for artifacts
-RUN mkdir -p /artifacts/linux/amd64
-RUN mkdir -p /artifacts/linux/arm64
-RUN mkdir -p /artifacts/linux/arm/v7
-RUN mkdir -p /artifacts/linux/arm/v6
+RUN mkdir -p \
+    /artifacts/linux/amd64 \
+    /artifacts/linux/arm64 \
+    /artifacts/linux/arm/v7 \
+    /artifacts/linux/arm/v6
 
-# Store artifacts
-RUN cp $CARGO_TARGET_DIR/release/librespot /artifacts/linux/amd64/
-RUN cp $CARGO_TARGET_DIR/aarch64-unknown-linux-gnu/release/librespot /artifacts/linux/arm64/
-RUN cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabihf/release/librespot /artifacts/linux/arm/v7/
-RUN cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabi/release/librespot /artifacts/linux/arm/v6/
+# Build librespot binaries
+RUN cargo build --release --no-default-features --features pulseaudio-backend \
+    && cp $CARGO_TARGET_DIR/release/librespot /artifacts/linux/amd64/ \
+    && rm -rf $CARGO_TARGET_DIR
+RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-features --features pulseaudio-backend \
+    && cp $CARGO_TARGET_DIR/aarch64-unknown-linux-gnu/release/librespot /artifacts/linux/arm64/ \
+    && rm -rf $CARGO_TARGET_DIR
+RUN cargo build --release --target arm-unknown-linux-gnueabihf --no-default-features --features pulseaudio-backend \
+    && cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabihf/release/librespot /artifacts/linux/arm/v7/ \
+    && rm -rf $CARGO_TARGET_DIR
+RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features pulseaudio-backend \
+    && cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabi/release/librespot /artifacts/linux/arm/v6/ \
+    && rm -rf $CARGO_TARGET_DIR
 
 
 ###################################
