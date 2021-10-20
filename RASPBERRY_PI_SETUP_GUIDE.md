@@ -103,9 +103,7 @@ services:
     image: "ghcr.io/finomnis/librespot-docker"
     restart: unless-stopped
     tty: true  # if you want color in your log
-    ports:
-        - "5353:5353/udp"
-        - "5354:5354/tcp"
+    network_mode: host
     volumes:
         - /run/user/1000/pulse:/run/user/1000/pulse
 ```
@@ -115,7 +113,7 @@ Explanation:
 - `image: "ghcr.io/finomnis/librespot-docker"`: This image gets built from this repository and contains the librespot player.
   The image is tagged manually to whenever there is a proper release. If you want to use the latest version, use `ghcr.io/finomnis/librespot-docker:main`.
 - `tty: true`: Runs librespot in a virtual TTY, enabling nice color log.
-- `5353:5353/udp` and `5354:5354/tcp`: Those are the ports required by librespot.
+- `network_mode: host`: Allow librespot to expose necessary network ports on the host computer.
 - `/run/user/1000/pulse:/run/user/1000/pulse`: This volume mounts in the pulseaudio device, giving the container the capability to play audio.
                                                As previously mentioned, this only works if the host user has the UID/GID `1000`.
 

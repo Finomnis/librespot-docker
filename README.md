@@ -26,9 +26,7 @@ services:
     image: "ghcr.io/finomnis/librespot-docker"
     restart: unless-stopped
     tty: true  # if you want color in your log
-    ports:
-        - "5353:5353/udp"
-        - "5354:5354/tcp"
+    network_mode: host
     volumes:
         - /run/user/1000/pulse:/run/user/1000/pulse
 ```
@@ -45,6 +43,7 @@ services:
     image: "ghcr.io/finomnis/librespot-docker"
     restart: unless-stopped
     tty: true
+    network_mode: host
     environment:
         - LIBRESPOT_NAME=librespot
         - LIBRESPOT_DEVICE_TYPE=speaker
@@ -52,9 +51,6 @@ services:
         - LIBRESPOT_INITIAL_VOLUME=70
         - LIBRESPOT_AUDIO_FORMAT=F32
         - LIBRESPOT_AUTOPLAY=1
-    ports:
-        - "5353:5353/udp"
-        - "5354:5354/tcp"
     volumes:
         - /run/user/1000/pulse:/run/user/1000/pulse
 ```
