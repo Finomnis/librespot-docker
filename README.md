@@ -35,7 +35,7 @@ services:
 
 If you are not the user with id `1000`, you might have to adjust the first `1000` according to your user id.
 
-To add custom configuration for your librespot instance, here is a more complete script including environment variables:
+To customize your librespot instance, here is a more complete script including environment variables:
 
 ```
 version: "2"
