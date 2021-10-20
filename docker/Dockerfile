@@ -44,23 +44,26 @@ ARG LIBRESPOT_VERSION
 RUN git clone --branch v$LIBRESPOT_VERSION --depth 1 https://github.com/librespot-org/librespot.git /src
 WORKDIR /src
 
-# Build librespot
-RUN cargo build --release --no-default-features --features pulseaudio-backend
-RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-features --features pulseaudio-backend
-RUN cargo build --release --target arm-unknown-linux-gnueabihf --no-default-features --features pulseaudio-backend
-RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features pulseaudio-backend
-
 # Create directories for artifacts
-RUN mkdir -p /artifacts/linux/amd64
-RUN mkdir -p /artifacts/linux/arm64
-RUN mkdir -p /artifacts/linux/arm/v7
-RUN mkdir -p /artifacts/linux/arm/v6
+RUN mkdir -p \
+    /artifacts/linux/amd64 \
+    /artifacts/linux/arm64 \
+    /artifacts/linux/arm/v7 \
+    /artifacts/linux/arm/v6
 
-# Store artifacts
-RUN cp $CARGO_TARGET_DIR/release/librespot /artifacts/linux/amd64/
-RUN cp $CARGO_TARGET_DIR/aarch64-unknown-linux-gnu/release/librespot /artifacts/linux/arm64/
-RUN cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabihf/release/librespot /artifacts/linux/arm/v7/
-RUN cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabi/release/librespot /artifacts/linux/arm/v6/
+# Build librespot binaries
+RUN cargo build --release --no-default-features --features pulseaudio-backend \
+    cp $CARGO_TARGET_DIR/release/librespot /artifacts/linux/amd64/ \
+    rm -rf $CARGO_TARGET_DIR
+RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-features --features pulseaudio-backend \
+    cp $CARGO_TARGET_DIR/aarch64-unknown-linux-gnu/release/librespot /artifacts/linux/arm64/ \
+    rm -rf $CARGO_TARGET_DIR
+RUN cargo build --release --target arm-unknown-linux-gnueabihf --no-default-features --features pulseaudio-backend \
+    cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabihf/release/librespot /artifacts/linux/arm/v7/ \
+    rm -rf $CARGO_TARGET_DIR
+RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features pulseaudio-backend \
+    cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabi/release/librespot /artifacts/linux/arm/v6/ \
+    rm -rf $CARGO_TARGET_DIR
 
 
 ###################################
