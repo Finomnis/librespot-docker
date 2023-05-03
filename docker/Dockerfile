@@ -1,5 +1,5 @@
-ARG LIBRESPOT_VERSION="0.3.0"
-ARG DEBIAN_VERSION="11.1"
+ARG LIBRESPOT_VERSION="0.4.2"
+ARG DEBIAN_VERSION="11.7"
 
 ###################################
 # Build librespot
@@ -14,7 +14,7 @@ RUN dpkg --add-architecture armel
 # Add cross compilers and dependencies
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
     curl git build-essential crossbuild-essential-arm64 crossbuild-essential-armel crossbuild-essential-armhf pkg-config \
-    libpulse-dev libpulse-dev:arm64 libpulse-dev:armel libpulse-dev:armhf \
+    libasound2-dev libasound2-dev:arm64 libasound2-dev:armel libasound2-dev:armhf \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install rust
@@ -51,16 +51,16 @@ RUN mkdir -p \
     /artifacts/linux/arm/v6
 
 # Build librespot binaries
-RUN cargo build --release --no-default-features --features pulseaudio-backend \
+RUN cargo build --release \
     && cp $CARGO_TARGET_DIR/release/librespot /artifacts/linux/amd64/ \
     && rm -rf $CARGO_TARGET_DIR
-RUN cargo build --release --target aarch64-unknown-linux-gnu --no-default-features --features pulseaudio-backend \
+RUN cargo build --release --target aarch64-unknown-linux-gnu \
     && cp $CARGO_TARGET_DIR/aarch64-unknown-linux-gnu/release/librespot /artifacts/linux/arm64/ \
     && rm -rf $CARGO_TARGET_DIR
-RUN cargo build --release --target arm-unknown-linux-gnueabihf --no-default-features --features pulseaudio-backend \
+RUN cargo build --release --target arm-unknown-linux-gnueabihf \
     && cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabihf/release/librespot /artifacts/linux/arm/v7/ \
     && rm -rf $CARGO_TARGET_DIR
-RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-features --features pulseaudio-backend \
+RUN cargo build --release --target arm-unknown-linux-gnueabi \
     && cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabi/release/librespot /artifacts/linux/arm/v6/ \
     && rm -rf $CARGO_TARGET_DIR
 
@@ -68,17 +68,14 @@ RUN cargo build --release --target arm-unknown-linux-gnueabi --no-default-featur
 ###################################
 # Build final system
 #
-FROM debian:$DEBIAN_VERSION
+FROM debian:${DEBIAN_VERSION}-slim
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
-    libpulse0 \
+    pipewire-audio-client-libraries \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set up the user
 RUN groupadd -g 1000 pi && useradd pi -s /bin/bash -m -u 1000 -g 1000
-
-# Pulse config
-COPY pulse-client.conf /etc/pulse/client.conf
 
 # Switch to user space
 USER pi
