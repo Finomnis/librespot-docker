@@ -18,6 +18,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install rust
+ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin/:${PATH}"
 RUN rustup target add aarch64-unknown-linux-gnu
