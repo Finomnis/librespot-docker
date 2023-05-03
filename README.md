@@ -10,10 +10,10 @@ Convert your Raspberry Pi or PC to a [Spotify] streaming target!
 
 ## Quick start
 
-Make sure you have a PulseAudio server installed and running. <br/>
-Detailed instructions on how to setup PulseAudio and Docker on a Raspberry Pi can be found [here](./RASPBERRY_PI_SETUP_GUIDE.md).
+Make sure you have a PipeWire server installed and running. <br/>
+Detailed instructions on how to setup PipeWire and Docker on a Raspberry Pi can be found [here](./RASPBERRY_PI_SETUP_GUIDE.md).
 
-To run the librespot Docker image successfully, you have to mount in the PulseAudio device as `/run/user/1000/pulse` to the Docker container and publish the
+To run the librespot Docker image successfully, you have to mount in the PipeWire device as `/tmp/pipewire-0` to the Docker container and publish the
 ports `5353/udp` and `5354/tcp`.
 
 All of this can be achieved through the following docker-compose script:
@@ -28,7 +28,7 @@ services:
     tty: true  # if you want color in your log
     network_mode: host
     volumes:
-        - /run/user/1000/pulse:/run/user/1000/pulse
+        - /run/user/1000/pipewire-0:/tmp/pipewire-0
 ```
 
 If you are not the user with id `1000`, you might have to adjust the first `1000` according to your user id.
@@ -52,7 +52,7 @@ services:
         - LIBRESPOT_AUDIO_FORMAT=F32
         - LIBRESPOT_AUTOPLAY=1
     volumes:
-        - /run/user/1000/pulse:/run/user/1000/pulse
+        - /run/user/1000/pipewire-0:/tmp/pipewire-0
 ```
 
 ## Environment Variables

@@ -1,5 +1,7 @@
 # Raspberry Pi Setup Guide
 
+**IMPORTANT - This guide is outdated. It describes the old PulseAudio based setup; the new version has switched to PipeWire. Pull requests for rewriting this guide are welcome; I didn't bother because so far nobody (except of me) ever used this image.**
+
 This guide is specific for Raspberry Pi's (in my case a Raspberry Pi 3B+).
 But for other boards, it works similar, probably.
 
