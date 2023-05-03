@@ -71,7 +71,7 @@ RUN cargo build --release --target arm-unknown-linux-gnueabi \
 #
 FROM debian:${DEBIAN_VERSION}-slim
 
-RUN echo "deb http://deb.debian.org/debian bullseye-backports main" > /etc/apt/sources.list
+RUN echo "deb http://deb.debian.org/debian bullseye-backports main" >>/etc/apt/sources.list
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
     -t bullseye-backports \
     pipewire \
