@@ -71,8 +71,11 @@ RUN cargo build --release --target arm-unknown-linux-gnueabi \
 #
 FROM debian:${DEBIAN_VERSION}-slim
 
+RUN echo "deb http://deb.debian.org/debian bullseye-backports main" > /etc/apt/sources.list
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
-    pipewire-audio-client-libraries \
+    -t bullseye-backports \
+    pipewire \
+    pipewire-alsa \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set up the user
@@ -91,6 +94,9 @@ RUN librespot --version
 # Ports
 EXPOSE 5353/udp
 EXPOSE 5354/tcp
+
+# Runtime directory, required for pipewire compatibility
+ENV XDG_RUNTIME_DIR=/tmp
 
 # Execute start script at runtime
 COPY start.sh /start.sh
