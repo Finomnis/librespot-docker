@@ -25,11 +25,10 @@ RUN rustup target add aarch64-unknown-linux-gnu
 RUN rustup target add arm-unknown-linux-gnueabi
 RUN rustup target add arm-unknown-linux-gnueabihf
 
-# Configure rust for cross compilation
-RUN mkdir /.cargo && \
-    echo '[target.aarch64-unknown-linux-gnu]\nlinker = "aarch64-linux-gnu-gcc"' > /.cargo/config && \
-    echo '[target.arm-unknown-linux-gnueabihf]\nlinker = "arm-linux-gnueabihf-gcc"' >> /.cargo/config && \
-    echo '[target.arm-unknown-linux-gnueabi]\nlinker = "arm-linux-gnueabi-gcc"' >> /.cargo/config
+# Configure rust linkers for cross compilation
+ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=/usr/bin/aarch64-linux-gnu-gcc
+ENV CARGO_TARGET_ARM_UNKNOWN_LINUX_GNUEABIHF_LINKER=/usr/bin/arm-linux-gnueabihf-gcc
+ENV CARGO_TARGET_ARM_UNKNOWN_LINUX_GNUEABI_LINKER=/usr/bin/arm-linux-gnueabi-gcc
 
 # Set rust cross compilation environment variables
 ENV CARGO_TARGET_DIR=/build
