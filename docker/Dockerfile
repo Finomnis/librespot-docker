@@ -23,11 +23,11 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin/:${PATH}"
 RUN rustup target add aarch64-unknown-linux-gnu
 RUN rustup target add arm-unknown-linux-gnueabi
-RUN rustup target add arm-unknown-linux-gnueabihf
+RUN rustup target add armv7-unknown-linux-gnueabihf
 
 # Configure rust linkers for cross compilation
 ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=/usr/bin/aarch64-linux-gnu-gcc
-ENV CARGO_TARGET_ARM_UNKNOWN_LINUX_GNUEABIHF_LINKER=/usr/bin/arm-linux-gnueabihf-gcc
+ENV CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABIHF_LINKER=/usr/bin/arm-linux-gnueabihf-gcc
 ENV CARGO_TARGET_ARM_UNKNOWN_LINUX_GNUEABI_LINKER=/usr/bin/arm-linux-gnueabi-gcc
 
 # Set rust cross compilation environment variables
@@ -35,7 +35,7 @@ ENV CARGO_TARGET_DIR=/build
 ENV CARGO_HOME=/build/cache
 ENV PKG_CONFIG_ALLOW_CROSS=1
 ENV PKG_CONFIG_PATH_aarch64_unknown_linux_gnu=/usr/lib/aarch64-linux-gnu/pkgconfig/
-ENV PKG_CONFIG_PATH_arm_unknown_linux_gnueabihf=/usr/lib/arm-linux-gnueabihf/pkgconfig/
+ENV PKG_CONFIG_PATH_armv7_unknown_linux_gnueabihf=/usr/lib/arm-linux-gnueabihf/pkgconfig/
 ENV PKG_CONFIG_PATH_arm_unknown_linux_gnueabi=/usr/lib/arm-linux-gnueabi/pkgconfig/
 
 # Download librespot
@@ -57,8 +57,8 @@ RUN cargo build --release \
 RUN cargo build --release --target aarch64-unknown-linux-gnu \
     && cp $CARGO_TARGET_DIR/aarch64-unknown-linux-gnu/release/librespot /artifacts/linux/arm64/ \
     && rm -rf $CARGO_TARGET_DIR
-RUN cargo build --release --target arm-unknown-linux-gnueabihf \
-    && cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabihf/release/librespot /artifacts/linux/arm/v7/ \
+RUN cargo build --release --target armv7-unknown-linux-gnueabihf \
+    && cp $CARGO_TARGET_DIR/armv7-unknown-linux-gnueabihf/release/librespot /artifacts/linux/arm/v7/ \
     && rm -rf $CARGO_TARGET_DIR
 RUN cargo build --release --target arm-unknown-linux-gnueabi \
     && cp $CARGO_TARGET_DIR/arm-unknown-linux-gnueabi/release/librespot /artifacts/linux/arm/v6/ \
