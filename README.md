@@ -65,6 +65,8 @@ services:
 | LIBRESPOT_INITIAL_VOLUME  | `70`         | The initial default playback volume, in percent.                                              |
 | LIBRESPOT_AUDIO_FORMAT    | `F32`        | The playback audio format. For more information read [librespot options].                     |
 | LIBRESPOT_AUTOPLAY        | `1`          | Whether random tracks should be played after the song queue is finished. Possible values: `0` or `1`.     |
+| LIBRESPOT_QUIET           | `1`          | Only log warning and error messages. Possible values: `0` or `1`.     |
+| LIBRESPOT_VERBOSE         | `0`          | Increase the amout of log output. Possible values: `0` or `1`.     |
 
 
 # Raspberry Pi Setup Guide
